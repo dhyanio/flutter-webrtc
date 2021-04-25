@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Home Page:- Init
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
@@ -27,11 +28,15 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+// Home Page:- Code
 class _MyHomePageState extends State<MyHomePage> {
   final _localRenderer = new RTCVideoRenderer();
+  final _remoteRenderer = new RTCVideoRenderer();
+
   @override
   dispose() {
     _localRenderer.dispose();
+    _remoteRenderer.dispose();
     super.dispose();
   }
 
@@ -44,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   initRenderers() async {
     await _localRenderer.initialize();
+    await _remoteRenderer.initialize();
   }
 
   _getUserMedia() async {
@@ -53,30 +59,48 @@ class _MyHomePageState extends State<MyHomePage> {
         'facingMode': 'user',
       },
     };
+
     MediaStream stream =
         await navigator.mediaDevices.getUserMedia(mediaConstraints);
     _localRenderer.srcObject = stream;
   }
 
+  videoRenderers() => SizedBox(
+      height: 210,
+      child: Row(
+        children: [
+          Flexible(
+              child: Container(
+            key: Key('local'),
+            margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+            decoration: BoxDecoration(color: Colors.black),
+            child: RTCVideoView(_localRenderer),
+          )),
+          Flexible(
+              child: Container(
+            key: Key('remote'),
+            margin: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+            decoration: BoxDecoration(color: Colors.black),
+            child: RTCVideoView(_localRenderer),
+          ))
+        ],
+      )
+    );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Container(
-          child: new Stack(
-            children: <Widget>[
-              new Positioned(
-                  top: 10.0,
-                  right: 10.0,
-                  left: 10.0,
-                  bottom: 10.0,
-                  child: new Container(
-                    child: new RTCVideoView(_localRenderer),
-                  ))
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Container(
+        child: Column(children: [
+       videoRenderers(),
+        //   offerAndAnswerButtons(),
+        //   sdpCondidateTF(),
+        //   sdpCondidateButtons(),
+        ])
+      ),
+    );
   }
 }
