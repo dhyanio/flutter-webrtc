@@ -12,9 +12,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter-WebRTC',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter-WebRTC: HomePage'),
+      home: MyHomePage(title: 'Dhyanio'),
     );
   }
 }
@@ -32,11 +32,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _localRenderer = new RTCVideoRenderer();
   final _remoteRenderer = new RTCVideoRenderer();
-
+  final sdpController = TextEditingController();
   @override
   dispose() {
     _localRenderer.dispose();
     _remoteRenderer.dispose();
+    sdpController.dispose();
     super.dispose();
   }
 
@@ -96,8 +97,45 @@ class _MyHomePageState extends State<MyHomePage> {
               backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
             ),
           ),
+          ElevatedButton(
+            onPressed: null,
+            child: Text('Anser'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+          ),
         ],
       );
+
+  Padding sdpCondidateTF() => Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextField(
+        controller: sdpController,
+        keyboardType: TextInputType.multiline,
+        maxLines: 4,
+        maxLength: TextField.noMaxLength,
+      ));
+
+  Row sdpCondidateButtons() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: null,
+            child: Text('Set Remote Desc'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: null,
+            child: Text('Set Candidate'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+          ),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,8 +146,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(children: [
         videoRenderers(),
         offerAndAnswerButtons(),
-        //   sdpCondidateTF(),
-        //   sdpCondidateButtons(),
+        sdpCondidateTF(),
+        sdpCondidateButtons(),
       ])),
     );
   }
