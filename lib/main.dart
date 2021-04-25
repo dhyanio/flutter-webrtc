@@ -84,9 +84,20 @@ class _MyHomePageState extends State<MyHomePage> {
             child: RTCVideoView(_localRenderer),
           ))
         ],
-      )
-    );
+      ));
 
+  Row offerAndAnswerButtons() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: null,
+            child: Text('Offer'),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+            ),
+          ),
+        ],
+      );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,13 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        child: Column(children: [
-       videoRenderers(),
-        //   offerAndAnswerButtons(),
+          child: Column(children: [
+        videoRenderers(),
+        offerAndAnswerButtons(),
         //   sdpCondidateTF(),
         //   sdpCondidateButtons(),
-        ])
-      ),
+      ])),
     );
   }
 }
